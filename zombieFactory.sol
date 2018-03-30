@@ -15,8 +15,8 @@ contract ZombieFactory {
   Zombie[] public zombies;
 
   // create new Zombie, set parameter variables and add it to the ombies array
-  function createZombie(string _name, uint _dna) {
-    zombies.push(Zombie(_name, _dna));
+  function _createZombie(string _name, uint _dna) private {
+      zombies.push(Zombie(_name, _dna));
   }
 
 }
