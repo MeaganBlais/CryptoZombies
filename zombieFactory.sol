@@ -19,4 +19,11 @@ contract ZombieFactory {
       zombies.push(Zombie(_name, _dna));
   }
 
+  // define function with view (not pure) permissions and set to return uint
+  // generate pseudo-random hexidecimal typcast as uint, return modulus of dnaModulus
+  function _generateRandomDna(string _str) private view returns (uint) {
+    uint rand = uint(keccak256(_str));
+    return rand % dnaModulus;         
+  }
+
 }
