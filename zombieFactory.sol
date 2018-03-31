@@ -2,6 +2,9 @@ pragma solidity ^0.4.19;
 
 contract ZombieFactory {
 
+  // declare new event for front end to listen for
+  event NewZombie(uint zombieId, string name, uint dna);
+
   uint dnaDigits = 16;
   uint dnaModulus = 10 ** dnaDigits;
 
@@ -15,8 +18,10 @@ contract ZombieFactory {
   Zombie[] public zombies;
 
   // create new Zombie, set parameter variables and add it to the ombies array
+  // fire event to let the app know the function was called
   function _createZombie(string _name, uint _dna) private {
-      zombies.push(Zombie(_name, _dna));
+      uint id = zombies.push(Zombie(_name, _dna)) - 1;
+      NewZombie(id, _name, _dna);
   }
 
   // define function with view (not pure) permissions and set to return uint
