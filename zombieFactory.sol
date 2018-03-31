@@ -24,7 +24,7 @@ contract ZombieFactory {
   // create new Zombie, set parameter variables and add it to the ombies array
   // assign zombie to caller of function and increase owner count
   // execute event to let the app know the function was called
-  function _createZombie(string _name, uint _dna) private {
+  function _createZombie(string _name, uint _dna) internal {
       uint id = zombies.push(Zombie(_name, _dna)) - 1;
       zombieToOwner[id] = msg.sender;
       ownerZombieCount[msg.sender]++;
