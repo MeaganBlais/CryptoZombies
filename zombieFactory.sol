@@ -38,8 +38,9 @@ contract ZombieFactory {
     return rand % dnaModulus;         
   }
 
-  // generate new zombie
+  // verify that sender does not own zombie and if not, generate new zombie
   function createRandomZombie(string _name) public {
+    require(ownerZombieCount[msg.sender] == 0);
     uint randDna = _generateRandomDna(_name);
     _createZombie(_name, randDna);
   }
