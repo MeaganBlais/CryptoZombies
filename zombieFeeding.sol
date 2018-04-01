@@ -23,22 +23,28 @@ contract ZombieFeeding is ZombieFactory {
   // Initialize contract
   KittyInterface kittyContract;
 
+  // providing function to allow external contract address to be changed if needed
   function setKittyContractAddress(address _address) external onlyOwner {
       kittyContract = KittyInterface(_address);
   }
 
+  // setting a cooldown period to be used between feedings
   function _triggerCooldown(Zombie storage _zombie) internal {
     _zombie.readyTime = uint32(now + cooldownTime);
   }
 
+  // providing verification function for feeding schedule
   function _isReady(Zombie storage _zombie) internal view returns (bool) {
     return (_zombie.readyTime <= now);
   }
 
   // setting up new zombie with mutated dna using zombieOwner who infected them
-  function feedAndMultiply(uint _zombieId, uint _targetDna, string _species) public {
+  // set to internal to avoid misuse and since only needed for feedOnKitty function
+  // verify zombie is only eating once a day
+  function feedAndMultiply(uint _zombieId, uint _targetDna, string _species) internal {
     require(msg.sender == zombieToOwner[_zombieId]);
     Zombie storage myZombie = zombies[_zombieId];
+    require(_isReady(myZombie));
     _targetDna = _targetDna % dnaModulus;
     uint newDna = (myZombie.dna + _targetDna) / 2;
     // check if new zombie is kitty and adjust dna as needed
@@ -46,6 +52,7 @@ contract ZombieFeeding is ZombieFactory {
       newDna = newDna - newDna % 100 + 99;
     }
     _createZombie("NoName", newDna);
+    _triggerCooldown(myZombie);
   }
 
   // setting function to handle multiple return values from CrytoKitties interface
