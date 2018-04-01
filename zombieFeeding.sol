@@ -1,6 +1,6 @@
 pragma solidity ^0.4.19;
 
-import "./zombiefactory.sol";
+import "./zombieFactory.sol";
 
 //define interface to declare function that we will interact with from others contract
 contract KittyInterface {
