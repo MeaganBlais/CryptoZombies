@@ -20,4 +20,22 @@ contract ZombieHelper is ZombieFeeding {
         require(msg.sender == zombieToOwner[_zombieId]);
         zombies[_zombieId].dna = _newDna;
     }
+
+    // external view functions don't cost gas
+    // function to display a user's entire zombie army
+    // rebuilding an array in memory is cheaper than using storage
+    function getZombiesByOwner(address _owner) external view returns (uint[]) {
+        // instantiate a new array in memory
+        uint[] memory result = new uint[](ownerZombieCount[_owner]);
+        
+        uint counter = 0;
+    
+        for (uint i = 0; i < zombies.length; i++) {
+            if (zombieToOwner[i] == _owner) {
+                result[counter] = i;
+                counter++;
+            }
+        }
+        return result;
+    }
 }
