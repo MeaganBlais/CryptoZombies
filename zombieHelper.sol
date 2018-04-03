@@ -4,10 +4,18 @@ import "./zombieHelper.sol";
 
 contract ZombieHelper is ZombieFeeding {
 
+    uint levelUpFee = 0.001 ether;
+
     // set restriction based on level
     modifier aboveLevel(uint _level, uint _zombieId) {
         require(zombies[_zombieId].level >= _level);
         _;
+    }
+
+    // set function to level up zombie if fee paid
+    function levelUp(uint _zombieId) external payable {
+        require(msg.value == levelUpFee);
+        zombies[_zombieId].level++;
     }
 
     // provide incentives to level up zombies
