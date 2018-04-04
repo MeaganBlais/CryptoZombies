@@ -9,6 +9,8 @@
   </head>
   <body>
 
+    <div id="zombies"></div>
+
     <script>
       var cryptoZombies;
       var userAccount;
@@ -24,9 +26,34 @@
             // if it's changed reset userAccount
             userAccount = web3.eth.accounts[0];
             // update the UI with new account
-            getZombiesByOwner(userAccount).then(displayZombies);
+            getZombiesByOwner(userAccount)
+            .then(displayZombies);
           }
         }, 100);
+      }
+
+      // TODO - update simple jQuery with React or Vue & use link below for imaages
+      // https://github.com/loomnetwork/zombie-char-component 
+      function displayZombies(ids) {
+        // clear #zombies div
+        $("#zombies").empty();
+        // loop through each id and call function that provides information about each
+        for (id of ids) {
+          getZombieDetails(id)
+          .then(function(zombie) {
+            // format template for display of details and append to div
+            $("#zombies").append(`<div class="zombie">
+            <ul>
+              <li>Name: ${zombie.name}</li>
+              <li>DNA: ${zombie.dna}</li>
+              <li>Level: ${zombie.level}</li>
+              <li>Wins: ${zombie.winCount}</li>
+              <li>Losses: ${zombie.lossCount}</li>
+              <li>Ready Time: ${zombie.readyTime}</li>
+            </ul>
+            </div>`);
+          });
+        }
       }
 
       function getZombieDetails(id) {
