@@ -11,11 +11,22 @@
 
     <script>
       var cryptoZombies;
+      var userAccount;
 
       function startApp() {
         var cryptoZombiesAddress = "YOUR_CONTRACT_ADDRESS";
         // instantiate cryptoZombies
         cryptoZombies = new web3js.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
+
+        var accountInterval = setInterval(function() {
+          // check if account is still the same
+          if (web3.eth.accounts[0] !== userAccount) {
+            // if it's changed reset userAccount
+            userAccount = web3.eth.accounts[0];
+            // update the UI with new account
+            getZombiesByOwner(userAccount).then(displayZombies);
+          }
+        }, 100);
       }
 
       function getZombieDetails(id) {
