@@ -30,6 +30,17 @@
             .then(displayZombies);
           }
         }, 100);
+
+        // Setting up seperate Web3 provider that supports WebSockets for events
+        var web3Infura = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
+        var czEvents = new web3Infura.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
+        
+        czEvents.events.Transfer({ filter: { _to: userAccount } })
+        .on("data", function(event) {
+          let data = event.returnValues;
+          getZombiesByOwner(userAccount).then(displayZombies);
+        }).on("error", console.error);
+
       }
 
       // TODO - update simple jQuery with React or Vue & use link below for imaages
