@@ -56,8 +56,10 @@
         }
       }
 
+      // TODO: refactor createRandomZombie & feedOnKitty to make code DRY
+      // add logic in this new function to allow for attack, changeName, changeDna
       function createRandomZombie(name) {
-        $("#txStatus").text("Creating new zombie on blockchain. Please standby.")
+        $("#txStatus").text("Creating new zombie on blockchain. Please standby.");
         // send transaction to contract
         return CryptoZombies.methods.createRandomZombie(name)
         .send({ from: userAccount })
@@ -73,7 +75,7 @@
       }
 
       function feedOnKitty(zombieId, kittyId) {
-        $("#txStatus").text("Eating a delicious kitty. Please standby.")
+        $("#txStatus").text("Eating a delicious kitty. Please standby.");
         // send transaction to contract
         return CryptoZombies.methods.feedOnKitty(zombieId, kittyId)
         .send({ from: userAccount })
